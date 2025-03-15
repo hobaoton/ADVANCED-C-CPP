@@ -1,6 +1,7 @@
 # ADVANCED-C-CPP
 #  BAI 1 COMPILER PROCESS - MACRO
 </details>
+
 ## 1. Tiền Xử Lý (Preprocessing)
 Quá trình tiền xử lý chuyển đổi file `.c` hoặc `.h` thành file `.i`. Lệnh biên dịch:
 ```sh
