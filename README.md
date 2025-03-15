@@ -1,6 +1,8 @@
 # ADVANCED-C-CPP
 #  BAI 1 COMPILER PROCESS - MACRO
-
+<details>
+  <summary>Chi tiết</summary>
+ 
 ## 1. Tiền Xử Lý (Preprocessing)
 Quá trình tiền xử lý chuyển đổi file `.c` hoặc `.h` thành file `.i`. Lệnh biên dịch:
 ```sh
@@ -169,30 +171,6 @@ Từng bước với lệnh cụ thể:
 5. **Chạy chương trình:** `./main.exe`
 
 Mỗi bước trên đều có thể kiểm tra bằng cách xem nội dung file tương ứng (`cat`, `ls -l`).
-
-# Dự án của tôi
-
-Đây là mô tả ngắn gọn của dự án.
-
-<details>
-  <summary><strong>Hướng dẫn cài đặt</strong></summary>
-
-  ## Hướng dẫn cài đặt
-
-  1. **Clone repository:**
-     ```bash
-     git clone https://github.com/username/myproject.git
-     ```
-  2. **Cài đặt các phụ thuộc:**
-     ```bash
-     npm install
-     ```
-  3. **Chạy ứng dụng:**
-     ```bash
-     npm start
-     ```
-
 </details>
 
-Các nội dung khác của README...
 
