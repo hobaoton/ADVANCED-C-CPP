@@ -173,4 +173,108 @@ Từng bước với lệnh cụ thể:
 Mỗi bước trên đều có thể kiểm tra bằng cách xem nội dung file tương ứng (`cat`, `ls -l`).
 </details>
 
+# BAI 2 STDARG - ASSERT
+<details>
+  <summary>Chi tiết</summary>
+## 1. Thư viện stdarg.h
+
+### 1.1 Mục đích
+- Hỗ trợ xây dựng các hàm có số lượng tham số biến đổi (variadic functions).
+- Cho phép truy cập vào danh sách các đối số được truyền vào sau đối số cố định cuối cùng.
+
+### 1.2 Các macro chính
+- **`va_list`**  
+  Kiểu dữ liệu dùng để lưu trữ danh sách tham số biến đổi.
+
+- **`va_start(va_list, last_fixed_arg)`**  
+  Khởi tạo danh sách các đối số biến đổi, trong đó `last_fixed_arg` là đối số cuối cùng có kiểu cố định.
+
+- **`va_arg(va_list, type)`**  
+  Lấy đối số tiếp theo từ danh sách với kiểu dữ liệu được chỉ định.
+
+- **`va_end(va_list)`**  
+  Giải phóng tài nguyên được cấp phát cho danh sách các đối số.
+
+### 1.3 Ví dụ sử dụng stdarg.h
+
+Ví dụ: Hàm `sum` tính tổng các số nguyên cho đến khi gặp một sentinel.  
+Trong ví dụ này, sử dụng sentinel `'a'` để đánh dấu điểm kết thúc danh sách.
+
+```c
+#include <stdio.h>
+#include <stdarg.h>
+
+#define tong(...) sum(__VA_ARGS__, 'a') // 'a' làm sentinel
+
+int sum(int first, ...) {
+    va_list args;
+    va_start(args, first);
+    
+    // Lưu các số vào mảng tạm (giả sử không vượt quá 100 giá trị)
+    int numbers[100];
+    int count = 0;
+    
+    numbers[count++] = first;
+    
+    // Đọc các đối số cho đến khi gặp sentinel
+    while (1) {
+        int value = va_arg(args, int);
+        // Ép về char để so sánh với sentinel 'a'
+        if ((char)value == 'a') {
+            break;
+        }
+        numbers[count++] = value;
+    }
+    
+    va_end(args);
+    
+    int result = 0;
+    for (int i = 0; i < count; i++) {
+        result += numbers[i];
+    }
+    
+    return result;
+}
+
+int main() {
+    
+    printf("Tong cac gia tri: %d\n", tong(4, 9, 0, 10, 15, 20));
+    return 0;
+}
+```
+
+## 2. Tổng quan về assert.h
+- **assert.h** là thư viện tiêu chuẩn trong C cung cấp macro `assert`.
+- Macro `assert(condition)` được sử dụng để kiểm tra điều kiện tại thời điểm chạy (runtime). Nếu điều kiện không được thỏa mãn (false), chương trình sẽ dừng lại và in ra thông báo lỗi, kèm theo thông tin về file và số dòng.
+
+### 2.1. Cách thức hoạt động của assert
+- Khi biểu thức trong `assert(condition)` được đánh giá là false (0), chương trình:
+  - In ra thông báo lỗi, bao gồm tên file, số dòng và nội dung biểu thức không thỏa mãn.
+  - Gọi hàm `abort()` để kết thúc chương trình ngay lập tức.
+- Nếu biểu thức đúng (non-zero), `assert` không thực hiện hành động nào và chương trình tiếp tục chạy bình thường.
+
+### 2.2. Ví dụ sử dụng assert
+Dưới đây là một ví dụ minh họa cách sử dụng `assert` để đảm bảo rằng một giá trị không bị chia cho số 0:
+
+```c
+#include <stdio.h>
+#include <assert.h>
+
+// Hàm chia, kiểm tra điều kiện không chia cho 0
+int divide(int a, int b) {
+    // Kiểm tra rằng b không bằng 0
+    assert(b != 0);
+    return a / b;
+}
+
+int main() {
+    int x = 10;
+    int y = 0;  // Thử nghiệm với giá trị 0 để kích hoạt assert
+    // Nếu y bằng 0, assert sẽ dừng chương trình và thông báo lỗi
+    int result = divide(x, y);
+    printf("Result: %d\n", result);
+    return 0;
+}
+</details>
+
 
