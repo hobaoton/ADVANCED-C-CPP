@@ -401,7 +401,7 @@ int main() {
 Bitmask là một kỹ thuật hữu ích giúp tối ưu hóa bộ nhớ và xử lý dữ liệu hiệu quả trong lập trình hệ thống và nhúng. Việc sử dụng các toán tử bitwise giúp quản lý trạng thái và quyền truy cập một cách nhanh chóng và tiết kiệm bộ nhớ.
 </details>
 
-# BÀI 4 POINTER
+# BAI 4 POINTER
 
 <details>
   <summary>Chi tiết</summary>
