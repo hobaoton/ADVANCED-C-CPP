@@ -403,9 +403,11 @@ Bitmask là một kỹ thuật hữu ích giúp tối ưu hóa bộ nhớ và x�
 
 # BÀI 4 POINTER
 
-## 1. Tổng quan về Pointer
 <details>
   <summary>Chi tiết</summary>
+
+## 1. Tổng quan về Pointer
+
 - **Khái niệm**: Con trỏ (pointer) là một biến đặc biệt trong ngôn ngữ lập trình C, chứa địa chỉ bộ nhớ của một đối tượng khác như biến, hàm, hoặc mảng. Việc sử dụng con trỏ giúp chúng ta thực hiện các thao tác trên bộ nhớ một cách linh hoạt và hiệu quả hơn.
 
 - **Cách khai báo**: Con trỏ được khai báo bằng cách sử dụng dấu `*` trước tên biến:
