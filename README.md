@@ -278,3 +278,125 @@ int main() {
 </details>
 
 
+# BAI 3 BITMARK
+<details>
+  <summary>Chi tiết</summary>
+  
+## 1. Giới thiệu về Bitmask
+Bitmask là một kỹ thuật sử dụng các bit để lưu trữ và thao tác với các cờ (flags) hoặc trạng thái trong một biến số nguyên. Kỹ thuật này giúp tối ưu hóa bộ nhớ, thực hiện các phép toán logic trên một cụm bit, và quản lý các trạng thái, quyền truy cập, hoặc các thuộc tính khác của một đối tượng.
+
+## 2. Các Toán Tử Bitwise
+Toán tử bitwise được sử dụng để thao tác trực tiếp trên các bit của một số. Dưới đây là danh sách các toán tử bitwise cơ bản:
+
+### 2.1. Phép NOT (~)
+- Đảo ngược tất cả các bit của số.
+- Bit 1 sẽ thành 0, bit 0 sẽ thành 1.
+
+Ví dụ:
+```cpp
+#include <stdio.h>
+#include <stdint.h>
+
+int main() {
+    uint8_t user1 = 0b00001110;
+    uint8_t user2 = 0b10101001;
+    printf("~user1 = 0b%08b\n", (uint8_t)~user1);
+    printf("~user2 = 0b%08b\n", (uint8_t)~user2);
+    return 0;
+}
+```
+
+Kết quả:
+```
+~user1 = 0b11110001
+~user2 = 0b01010110
+```
+
+### 2.2. Phép AND (&)
+- Chỉ trả về 1 nếu cả hai bit đều là 1.
+
+Ví dụ:
+```cpp
+user1 & user2 // Kết quả: 0b00001000
+```
+
+### 2.3. Phép OR (|)
+- Trả về 1 nếu ít nhất một trong hai bit là 1.
+
+Ví dụ:
+```cpp
+user1 | user2 // Kết quả: 0b10101111
+```
+
+### 2.4. Phép XOR (^)
+- Trả về 1 nếu hai bit khác nhau, ngược lại trả về 0.
+
+Ví dụ:
+```cpp
+user1 ^ user2 // Kết quả: 0b10100111
+```
+
+### 2.5. Phép Dịch Bit (>> và <<)
+- `>>`: Dịch phải, các bit bên trái bị đẩy ra ngoài, các bit mới bên phải được lấp bằng 0 hoặc 1 (tùy vào số âm hay dương).
+- `<<`: Dịch trái, các bit bên phải bị đẩy ra ngoài, các bit mới bên trái được lấp bằng 0.
+
+Ví dụ:
+```cpp
+// Dịch phải
+user1 >> 1 // Kết quả: 0b00000111
+user1 >> 5 // Kết quả: 0b00000000
+
+// Dịch trái
+user2 << 6 // Kết quả: 0b10000000
+```
+
+## 3. Ứng Dụng Bitmask
+### 3.1. Kiểm tra trạng thái bit
+```cpp
+if (user1 & (1 << 3)) {
+    printf("Bit thứ 3 đang bật\n");
+}
+```
+
+### 3.2. Bật một bit cụ thể
+```cpp
+user1 |= (1 << 2); // Bật bit thứ 2
+```
+
+### 3.3. Tắt một bit cụ thể
+```cpp
+user1 &= ~(1 << 2); // Tắt bit thứ 2
+```
+
+### 3.4. Đảo trạng thái một bit
+```cpp
+user1 ^= (1 << 2); // Đảo bit thứ 2
+```
+
+## 4. Sử dụng Bit-Field trong C
+Bit-field là một cách tối ưu hóa bộ nhớ bằng cách định nghĩa các trường bit trong struct.
+
+Ví dụ:
+```cpp
+#include <stdio.h>
+
+struct Status {
+    unsigned int bit0 : 1;
+    unsigned int bit1 : 1;
+    unsigned int bit2 : 1;
+    unsigned int bit3 : 1;
+};
+
+int main() {
+    struct Status status = {1, 0, 1, 1};
+    printf("Bit 0: %d, Bit 1: %d, Bit 2: %d, Bit 3: %d\n",
+           status.bit0, status.bit1, status.bit2, status.bit3);
+    return 0;
+}
+```
+
+## 5. Kết luận
+Bitmask là một kỹ thuật hữu ích giúp tối ưu hóa bộ nhớ và xử lý dữ liệu hiệu quả trong lập trình hệ thống và nhúng. Việc sử dụng các toán tử bitwise giúp quản lý trạng thái và quyền truy cập một cách nhanh chóng và tiết kiệm bộ nhớ.
+</details>
+
+
