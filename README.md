@@ -171,7 +171,7 @@ Từng bước với lệnh cụ thể:
 5. **Chạy chương trình:** `./main.exe`
 
 Mỗi bước trên đều có thể kiểm tra bằng cách xem nội dung file tương ứng (`cat`, `ls -l`).
-</details>
+  </details>
 
 # BAI 2 STDARG - ASSERT
 <details>
@@ -278,10 +278,9 @@ int main() {
 </details>
 
 
-# BAI 3 BITMARK
+# Bai 3 BITMARK
 <details>
   <summary>Chi tiết</summary>
-  
 ## 1. Giới thiệu về Bitmask
 Bitmask là một kỹ thuật sử dụng các bit để lưu trữ và thao tác với các cờ (flags) hoặc trạng thái trong một biến số nguyên. Kỹ thuật này giúp tối ưu hóa bộ nhớ, thực hiện các phép toán logic trên một cụm bit, và quản lý các trạng thái, quyền truy cập, hoặc các thuộc tính khác của một đối tượng.
 
@@ -397,6 +396,6 @@ int main() {
 
 ## 5. Kết luận
 Bitmask là một kỹ thuật hữu ích giúp tối ưu hóa bộ nhớ và xử lý dữ liệu hiệu quả trong lập trình hệ thống và nhúng. Việc sử dụng các toán tử bitwise giúp quản lý trạng thái và quyền truy cập một cách nhanh chóng và tiết kiệm bộ nhớ.
-</details>
 
+</details>
 
