@@ -1151,6 +1151,273 @@ int main ()
 - Ứng dụng xử lý lỗi ngoại lệ chương trình, debug chương trình.
   </details>
 
+# BAI 7 STRUCT && UNION
+<details>
+  <summary>Chi tiết</summary
+
+## 1. Struct
+- **Struct** cho phép định nghĩa một kiểu dữ liệu gồm nhiều thành phần (các biến) khác nhau. Mỗi thành phần của struct được gọi là **thành viên**. Struct rất hữu ích muốn nhóm các thông tin liên quan (ví dụ: thông tin của một sinh viên hay một điểm trong không gian).
+
+### 1.1. Khai báo Struct
+
+Có 2 cách để khai báo một struct:
+
+#### Cách 1: Sử dụng `struct` trực tiếp
+```c
+struct TenStruct {
+    kieuDuLieu1 thanhVien1;
+    kieuDuLieu2 thanhVien2;
+    // ...
+};
+
+// Khi khởi tạo biến, cần khai báo từ khóa 'struct'
+struct TenStruct bien1, bien2;
+```
+
+**Giải thích:**  
+- **Định nghĩa:** Cú pháp trên định nghĩa một kiểu dữ liệu mới có tên `struct TenStruct` với các thành viên có kiểu dữ liệu khác nhau.  
+- **Khởi tạo:** Khi khởi tạo biến thuộc kiểu này, bạn cần sử dụng từ khóa `struct` trước tên kiểu.
+
+**Ví dụ cụ thể:**
+```c
+struct Point {
+    int x;
+    int y;
+};
+
+int main() {
+    // Khởi tạo biến của kiểu struct Point với các giá trị ban đầu
+    struct Point lan1 = {8, 9};
+    return 0;
+}
+```
+
+Trong ví dụ này, struct `Point` chứa hai thành viên `x` và `y` (cả hai là kiểu `int`). Biến `lan1` được khởi tạo với giá trị 8 cho `x` và 9 cho `y`.
+
+#### Cách 2: Sử dụng `typedef`
+```c
+typedef struct {
+    kieuDuLieu1 thanhVien1;
+    kieuDuLieu2 thanhVien2;
+    // ...
+} TenStruct;
+
+// Khởi tạo biến mà không cần từ khóa 'struct'
+TenStruct bien1, bien2;
+```
+
+**Giải thích:**  
+- **Định nghĩa:** Sử dụng `typedef` để tạo một bí danh (alias) cho kiểu struct. Sau khi định nghĩa, bạn có thể sử dụng `TenStruct` trực tiếp mà không cần phải ghi `struct` mỗi lần khởi tạo biến.
+- **Tiện lợi:** Cách này làm cho code trở nên ngắn gọn và dễ đọc hơn.
+
+**Ví dụ cụ thể:**
+```c
+typedef struct {
+    char ten[30];
+    float diem;
+    int id;
+} SinhVien;
+
+int main() {
+    // Khởi tạo biến kiểu SinhVien với giá trị ban đầu
+    SinhVien sv1 = {"hobaoton", 8, 22145490};
+    return 0;
+}
+```
+
+Trong ví dụ này, struct `SinhVien` chứa:
+- Một mảng ký tự `ten` có 30 phần tử,
+- Một biến kiểu `float` là `diem`,
+- Và một biến kiểu `int` là `id`.
+
+### 1.2. Truy cập dữ liệu trong Struct
+
+Sau khi đã khởi tạo một struct, bạn có thể truy xuất dữ liệu của các thành viên bằng toán tử `.` (dấu chấm).
+
+**Ví dụ:**
+```c
+struct SinhVien sv1 = {"hobaoton", 8, 22145490};
+printf("Ten: %s, Diem: %.2f, ID: %d\n", sv1.ten, sv1.diem, sv1.id);
+```
+
+**Giải thích:**  
+- Toán tử `.` được sử dụng để truy cập từng thành viên của biến struct `sv1`.
+- Kết quả in ra sẽ hiển thị tên, điểm và ID của sinh viên.
+
+### 1.3. Truyền Struct vào Hàm
+
+Có hai cách để truyền struct vào hàm:
+
+#### Truyền theo giá trị
+```c
+void printSinhVien(SinhVien sv) {
+    printf("(%s, %.2f, %d)\n", sv.ten, sv.diem, sv.id);
+}
+```
+**Giải thích:**  
+- Hàm `printSinhVien` nhận một biến struct kiểu `SinhVien` theo giá trị.  
+- Một bản sao của struct được tạo ra khi gọi hàm, do đó, các thay đổi bên trong hàm không ảnh hưởng đến biến gốc.
+
+#### Truyền theo con trỏ
+```c
+void updateSinhVien(SinhVien* sv, float newDiem, int newID) {
+    sv->diem = newDiem;
+    sv->id = newID;
+}
+```
+**Giải thích:**  
+- Hàm `updateSinhVien` nhận một con trỏ đến struct `SinhVien`.
+- Toán tử `->` được sử dụng để truy cập các thành viên của struct thông qua con trỏ.
+- Việc truyền con trỏ cho phép hàm cập nhật trực tiếp giá trị của biến struct gốc.
+
+### 1.4. Kích thước của Struct
+
+Kích thước của một struct phụ thuộc vào kích thước của từng thành viên và có thể bị ảnh hưởng bởi việc căn chỉnh (alignment) và padding mà trình biên dịch thêm vào.
+
+**Ví dụ cụ thể:**
+```c
+#include <stdio.h>
+typedef struct {
+    char ten[30];  // 30 bytes
+    float diem;    // 4 bytes
+    int id;        // 4 bytes
+} SinhVien;
+
+int main() {
+    printf("Kich thuoc struct SinhVien: %zu bytes\n", sizeof(SinhVien));
+    return 0;
+}
+```
+
+**Giải thích:**  
+- Các thành viên của struct có kích thước riêng: mảng `ten` chiếm 30 bytes, `diem` chiếm 4 bytes, và `id` chiếm 4 bytes.
+- Trình biên dịch có thể chèn thêm padding giữa các thành viên để đảm bảo rằng các biến được căn chỉnh đúng theo yêu cầu của kiến trúc phần cứng.
+- Trong ví dụ này, kích thước thực tế của struct có thể lớn hơn tổng kích thước của các thành viên do padding (ví dụ: 40 bytes).
+
+## 2. Union
+
+Union cũng được sử dụng để nhóm các biến có kiểu dữ liệu khác nhau, nhưng **các thành viên của union chia sẻ cùng một vùng bộ nhớ**. Điều này có nghĩa rằng kích thước của union chỉ bằng kích thước của thành viên lớn nhất.
+
+### 2.1. Khai báo Union
+
+Có hai cách khai báo union:
+
+#### Cách 1: Sử dụng `union` trực tiếp
+```c
+union UnionName {
+    int intValue;
+    float floatValue;
+    char charValue;
+};
+```
+
+#### Cách 2: Sử dụng `typedef`
+```c
+typedef union {
+    int intValue;
+    float floatValue;
+    char charValue;
+} UnionName;
+```
+
+### 2.2. Tính chất của Union
+
+- **Chia sẻ vùng nhớ:**  
+  Tất cả các thành viên của union được lưu trữ tại cùng một địa chỉ. Nếu bạn thay đổi giá trị của một thành viên, các thành viên khác cũng sẽ bị ảnh hưởng.
+- **Kích thước:**  
+  Kích thước của union bằng kích thước của thành viên lớn nhất (về số byte).
+
+### 2.3. Ví dụ về Union
+```c
+#include <stdio.h>
+
+union Data {
+    int i;
+    float f;
+    char str[20];
+};
+
+int main() {
+    union Data data;
+
+    data.i = 10;
+    printf("data.i = %d\n", data.i);
+
+    data.f = 220.5;
+    printf("data.f = %f\n", data.f);
+
+    // Ghi đè giá trị, dữ liệu cũ bị ảnh hưởng do dùng chung vùng nhớ
+    data.str[0] = 'H';
+    data.str[1] = 'i';
+    data.str[2] = '\0';
+    printf("data.str = %s\n", data.str);
+
+    // Các giá trị của i và f sẽ không còn chính xác nữa
+    printf("data.i (invalid) = %d\n", data.i);
+    printf("data.f (invalid) = %f\n", data.f);
+
+    return 0;
+}
+```
+
+**Giải thích:**  
+- Ban đầu, `data.i` được gán giá trị 10 và in ra.
+- Sau đó, khi `data.f` được gán giá trị 220.5, vùng nhớ chung bị ghi đè và in ra giá trị mới của `data.f`.
+- Khi gán chuỗi `"Hi"` vào `data.str`, phần còn lại của vùng nhớ cũng bị thay đổi, làm cho các giá trị của `data.i` và `data.f` trở nên không hợp lệ.
+
+---
+
+## 3. Ứng dụng của Union và Struct
+
+Sự kết hợp của union và struct được sử dụng trong các ứng dụng truyền thông, giao tiếp dữ liệu, hay trong các hệ thống nhúng, nơi cần lưu trữ và truy xuất dữ liệu theo nhiều cách khác nhau từ cùng một vùng bộ nhớ.
+
+**Ví dụ:**
+```c
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
+typedef union {
+    struct {
+        uint8_t id[2];
+        uint8_t data[4];
+        uint8_t check_sum[2];
+    } data;
+    uint8_t frame[8];
+} Data_Frame;
+
+int main() {
+    Data_Frame transmitter_data;
+    
+    // Gán giá trị cho các thành viên của struct bên trong union
+    strcpy((char*)transmitter_data.data.id, "10");
+    strcpy((char*)transmitter_data.data.data, "1234");
+    strcpy((char*)transmitter_data.data.check_sum, "70");
+
+    // Vì union chia sẻ cùng một vùng nhớ, các thay đổi trên struct cũng được phản ánh trong mảng frame
+    Data_Frame receiver_data;
+    memcpy(receiver_data.frame, transmitter_data.frame, 8);
+    
+    // In ra các giá trị nhận được từ receiver_data
+    printf("Received ID: %s\n", receiver_data.data.id);
+    printf("Received Data: %s\n", receiver_data.data.data);
+    printf("Received Checksum: %s\n", receiver_data.data.check_sum);
+    
+    return 0;
+}
+```
+
+**Giải thích:**  
+- **Union Data_Frame:**  
+  - Định nghĩa một union có hai thành phần: một struct và một mảng byte `frame[8]`.
+  - Cả hai thành phần này sử dụng cùng một vùng bộ nhớ, do đó, mọi thay đổi trong thành phần `data` (struct) đều sẽ tự động được phản ánh trong mảng `frame`, và ngược lại.
+- **Truyền dữ liệu:**  
+  - Các giá trị được gán cho `transmitter_data.data.id`, `data`, và `check_sum` sau đó sẽ nằm liền nhau trong mảng `frame`.
+  - Hàm `memcpy` được sử dụng để sao chép toàn bộ mảng `frame` từ `transmitter_data` sang `receiver_data`.
+  - Khi in ra, ta thấy rằng các giá trị của `receiver_data.data` tương ứng với dữ liệu ban đầu được truyền đi.
+</details>
+
+
 # BAI 8 MEMORY LAYOUT
   <details>
     <summary>Chi tiết</summary>
