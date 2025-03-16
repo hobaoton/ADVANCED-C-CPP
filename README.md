@@ -1587,3 +1587,198 @@ void display(Queue q) {
 ```
 - *Ý tưởng*: Duyệt qua các phần tử từ `front` đến `rear` theo cơ chế vòng.
   </details>
+
+# BAI 10 LINK LIST
+<details>
+  <summary>Chi tiết</summary>
+  
+## 1. Khái niệm
+
+  **Danh sách liên kết** (`Linked List`) là một cấu trúc dữ liệu dạng danh sách, trong đó các phần tử (được gọi là "node") được liên kết với nhau bằng con trỏ. Mỗi node chứa hai thông tin chính:
+
+- **Dữ liệu**: Giá trị thông tin của node.
+- **Con trỏ**: Trỏ đến node tiếp theo trong danh sách.
+
+  **Đặc điểm của danh sách liên kết**
+- Không yêu cầu kích thước cố định như mảng.
+- Các phần tử không nằm liên tiếp trong bộ nhớ, giúp quản lý bộ nhớ linh hoạt hơn.
+- Dễ dàng thêm hoặc xóa phần tử mà không cần dịch chuyển dữ liệu như mảng.
+
+## 2. Các thao tác với danh sách liên kết
+
+### 2.1. Tạo một node mới
+```c
+Node *create_Node(int data) {
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+```
+- Dùng `malloc(sizeof(Node))` để cấp phát bộ nhớ cho một node mới.
+- Lưu `data` vào `newNode->data`.
+- Đặt `newNode->next = NULL` để node chưa liên kết với node nào khác.
+- Hàm trả về địa chỉ `newNode `để sử dụng trong danh sách liên kết.
+
+### 2.2. Chèn vào cuối danh sách (push_back)
+```c
+void push_back(Node **head, int data) {
+    Node *new_Node = create_Node(data);
+    if (*head == NULL) {
+        *head = new_Node;
+    } else {
+        Node *temp = *head;
+        while (temp->next != NULL) temp = temp->next;
+        temp->next = new_Node;
+    }
+}
+```
+- Gọi `create_Node(data)` để cấp phát bộ nhớ và gán giá trị cho node mới.  
+- Nếu `*head == NULL`, gán `head` trỏ đến node mới (node đầu tiên).  
+- Nếu danh sách không rỗng, dùng vòng lặp để tìm node cuối (`temp->next == NULL`).  
+- Gán `temp->next = new_Node` để nối node mới vào cuối danh sách.
+
+### 2.3. Xóa node cuối (pop_back)
+```c
+void pop_back(Node **head) {
+    if (*head == NULL) return;
+    if ((*head)->next == NULL) {
+        free(*head);
+        *head = NULL;
+        return;
+    }
+    Node *temp = *head;
+    while (temp->next->next != NULL) temp = temp->next;
+    free(temp->next);
+    temp->next = NULL;
+}
+```
+- Nếu `*head == NULL`, danh sách rỗng → Không cần làm gì.  
+- Nếu chỉ có một node, giải phóng bộ nhớ (`free(*head)`) và đặt `head = NULL`.  
+- Dùng vòng lặp tìm node có `temp->next->next == NULL`, tức là node ngay trước node cuối.  
+- Giải phóng bộ nhớ (`free(temp->next)`) và đặt `temp->next = NULL` để ngắt liên kết.
+
+### 2.4. Chèn vào đầu danh sách (push_front)
+```c
+void push_front(Node **head, int data) {
+    Node *new_Node = create_Node(data);
+    new_Node->next = *head;
+    *head = new_Node;
+}
+```
+- Gọi `create_Node(data)` để cấp phát bộ nhớ và khởi tạo node mới.  
+- Gán `new_Node->next = *head` để trỏ node mới đến node đầu danh sách.  
+- Gán `*head = new_Node`, làm cho node mới trở thành node đầu tiên trong danh sách.
+
+### 2.5. Xóa node đầu danh sách (pop_front)
+```c
+void pop_front(Node **head) {
+    if (*head == NULL) return;
+    Node *temp = *head;
+    *head = (*head)->next;
+    free(temp);
+}
+```
+- Nếu `*head == NULL`, không làm gì và thoát.  
+- Lưu `*head` vào biến `temp`.  
+- Di chuyển `*head` sang node kế tiếp (`(*head)->next`).  
+- Giải phóng `temp` để tránh rò rỉ bộ nhớ.
+
+### 2.6. Chèn node vào vị trí bất kỳ (insert)
+```c
+void insert(Node **head, int data, int pos) {
+    if (pos == 0) {
+        push_front(head, data);
+        return;
+    }
+    Node *new_Node = create_Node(data);
+    Node *temp = *head;
+    for (int i = 0; i < pos - 1 && temp != NULL; i++)
+        temp = temp->next;
+    if (temp == NULL) return;
+    new_Node->next = temp->next;
+    temp->next = new_Node;
+}
+```
+- Nếu `pos == 0`, gọi `push_front(head, data)` và thoát.  
+- Cấp phát bộ nhớ và gán giá trị cho `new_Node`.  
+- Duyệt danh sách đến node trước vị trí `pos`.  
+- Nếu `temp == NULL`, vị trí không hợp lệ, thoát khỏi hàm.  
+- Gán `new_Node->next = temp->next`.  
+- Cập nhật `temp->next = new_Node`.
+
+### 2.7. Xóa node tại vị trí bất kỳ (erase)
+```c
+void erase(Node **head, int pos) {
+    if (*head == NULL) return;
+    if (pos == 0) {
+        pop_front(head);
+        return;
+    }
+    Node *temp = *head;
+    for (int i = 0; i < pos - 1 && temp->next != NULL; i++)
+        temp = temp->next;
+    if (temp->next == NULL) return;
+    Node *toDelete = temp->next;
+    temp->next = temp->next->next;
+    free(toDelete);
+}
+```
+- Nếu `*head == NULL`, thoát khỏi hàm.  
+- Nếu `pos == 0`, gọi `pop_front(head)` và thoát.  
+- Duyệt danh sách đến node trước vị trí `pos`.  
+- Nếu `temp->next == NULL`, vị trí không hợp lệ, thoát khỏi hàm.  
+- Lưu node cần xóa vào `toDelete`.  
+- Cập nhật liên kết `temp->next = temp->next->next`.  
+- Giải phóng bộ nhớ của `toDelete`.
+
+### 2.8. Lấy giá trị node đầu tiên (front)
+```c
+int front(Node *head) {
+    return (head != NULL) ? head->data : -1;
+}
+```
+- Nếu `head == NULL`, trả về `-1` (giá trị mặc định khi danh sách rỗng).  
+- Nếu danh sách không rỗng, trả về `head->data`.
+
+### 2.9. Lấy giá trị node cuối cùng (back)
+```c
+int back(Node *head) {
+    if (head == NULL) return -1;
+    while (head->next != NULL)
+        head = head->next;
+    return head->data;
+}
+```
+- Dòng lệnh `if (head == NULL) return -1;` kiểm tra xem con trỏ `head` có trỏ đến một node hay không.  
+- Nếu `head` là `NULL`, nghĩa là danh sách rỗng, hàm trả về `-1` (một giá trị báo hiệu rằng không có node nào tồn tại).
+- Vòng lặp `while (head->next != NULL)` được sử dụng để duyệt từ node đầu tiên đến node cuối cùng của danh sách.  
+- Trong mỗi vòng lặp, lệnh `head = head->next;` cập nhật `head` thành node kế tiếp.  
+- Vòng lặp dừng lại khi gặp node mà `head->next` bằng `NULL`, tức là node đó là node cuối cùng trong danh sách.
+- Sau khi vòng lặp kết thúc, `head` trỏ đến node cuối cùng vì node đó không có node kế tiếp.  
+- Lệnh `return head->data;` trả về giá trị dữ liệu của node cuối cùng.
+
+### 2.10. Kiểm tra danh sách rỗng (empty)
+```c
+bool empty(Node *head) {
+    return head == NULL;
+}
+```
+- Hàm `empty(Node *head)` kiểm tra xem danh sách liên kết có rỗng hay không. Nếu `head` bằng `NULL`, nghĩa là không có node nào trong danh sách, hàm trả về `true`; ngược lại trả về `false`.
+
+### 2.11. Xóa toàn bộ danh sách (clear)
+```c
+void clear(Node **head) {
+    while (*head != NULL) {
+        Node *temp = *head;
+        *head = (*head)->next;
+        free(temp);
+    }
+}
+```
+- Trong khi danh sách không rỗng (`*head != NULL`), thực hiện các bước tiếp theo.
+- Gán `*head` cho biến tạm `temp`.
+- Đưa `*head` sang node kế tiếp (`(*head)->next`).
+- Gọi `free(temp)` để giải phóng bộ nhớ của node hiện tại.
+- Lặp lại quá trình cho đến khi danh sách rỗng (tức `*head` bằng `NULL`).
+</details>
