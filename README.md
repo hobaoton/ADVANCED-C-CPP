@@ -1150,3 +1150,303 @@ int main ()
 
 - Ứng dụng xử lý lỗi ngoại lệ chương trình, debug chương trình.
   </details>
+
+# BAI 9 STACK - QUEUE
+  <details>
+    <summary>Chi tiết</summary>   
+
+## 1. STACK
+
+### 1.1. **Khái niệm Stack (ngăn xếp)** 
+- **Stack** là một cấu trúc dữ liệu tuyến tính hoạt động theo cơ chế LIFO (Last In, First Out – Vào sau, ra trước). Điều này có nghĩa là phần tử được thêm vào cuối cùng sẽ được lấy ra đầu tiên
+
+### 1.2. **Các thao tác với Stack**
+
+- **Khởi tạo Stack** (`init_Stack`)
+```c
+void init_Stack (Stack *stack, int size)
+{
+    stack->item = (int*)malloc(size * sizeof(int));
+    stack->size = size;
+    stack->top = -1;
+}
+```
+- *Ý tưởng*: Cấp phát bộ nhớ động cho mảng `item` chứa phần tử của stack, gán kích thước `size` và đặt `top = -1` để biểu thị stack rỗng.
+
+- **Kiểm tra Stack rỗng** (`empty_Stack`)
+```c
+bool empty_Stack (Stack stack)
+{
+    return stack.top == -1;
+}
+```
+- *Ý tưởng*: Nếu `top == -1`, stack không chứa phần tử nào, trả về `true`, ngược lại trả về `false`.
+
+- **Kiểm tra Stack đầy** (`full_Stack`)
+```c
+bool full_Stack (Stack stack)
+{
+    return stack.top == stack.size - 1;
+}
+```
+- *Ý tưởng*: Nếu `top == size - 1`, stack đã đầy, không thể thêm phần tử mới.
+
+- **Thêm phần tử vào Stack** (`push_Stack`)
+```c
+void push_Stack (Stack *stack, int data)
+{
+    if (full_Stack(*stack))
+    {
+        printf("Stack đầy!\n");
+        return;
+    }
+    stack->item[++stack->top] = data;
+}
+```
+- *Ý tưởng*: Nếu stack chưa đầy, tăng `top` lên một đơn vị và gán giá trị `data` vào vị trí mới.
+
+- **Loại bỏ phần tử khỏi Stack** (`pop_Stack`)
+```c
+void pop_Stack (Stack *stack)
+{
+    if (empty_Stack(*stack))
+    {
+        printf("Stack rỗng!\n");
+        return;
+    }
+    int a = stack->item[stack->top--];
+    printf("Phần tử %d đã được lấy ra!\n", a);
+}
+```
+- *Ý tưởng*: Nếu stack không rỗng, lấy giá trị phần tử trên cùng, giảm `top` và in ra phần tử đã lấy.
+
+- **Lấy giá trị phần tử trên cùng** (`get_Stack`)
+```c
+int get_Stack (Stack stack)
+{
+    if (empty_Stack(stack))
+    {  
+        printf("Stack rỗng!\n"); 
+        return -1;
+    }
+    return stack.item[stack.top];
+}
+```
+- *Ý tưởng*: Nếu stack không rỗng, trả về phần tử tại `top`, ngược lại in thông báo và trả về `-1`.
+
+- **Hiển thị toàn bộ Stack** (`display_Stack`)
+```c
+void display_Stack (Stack stack)
+{
+    for (int i = 0; i <= stack.top; i++)
+    {
+        printf("Vị trí %d: %d\n", i, stack.item[i]);
+    }
+}
+```
+- *Ý tưởng*: Duyệt từ `0` đến `top` và in giá trị từng phần tử trong stack.
+
+## 2. LINEAR QUEUE
+
+### 2.1. Khái niệm Linear Queue
+- **Linear Queue** (hàng đợi tuyến tính) là một cấu trúc dữ liệu tuân theo nguyên tắc **FIFO (First In, First Out - Vào trước, ra trước)**. Nghĩa là phần tử được thêm vào trước sẽ được lấy ra trước. Linear Queue sử dụng một mảng có kích thước cố định để lưu trữ các phần tử, với hai chỉ số:
+- **Front**: Chỉ vị trí đầu của hàng đợi.
+- **Rear**: Chỉ vị trí cuối cùng của hàng đợi.
+
+### 2.2. Các thao tác với Linear Queue
+
+- **Khởi tạo Linear Queue** (`init_LinearQueue`)
+```c
+void init_LinearQueue(linear_Queue *liQueue, int size) {
+    liQueue->item = (int*)malloc(size * sizeof(int));
+    liQueue->size = size;
+    liQueue->front = -1;
+    liQueue->rear = -1;
+}
+```
+- *Ý tưởng*: Cấp phát bộ nhớ động cho mảng `item`, gán kích thước `size`, và đặt `front = -1`, `rear = -1` để biểu thị hàng đợi rỗng.
+
+- **Kiểm tra Linear Queue rỗng** (`empty_LinearQueue`)
+```c
+bool empty_LinearQueue(linear_Queue liQueue) {
+    return (liQueue.front == -1);
+}
+```
+- *Ý tưởng*: Nếu `front == -1`, hàng đợi không có phần tử nào, trả về `true`, ngược lại trả về `false`.
+
+- **Kiểm tra Linear Queue đầy** (`ful_LinearQueue`)
+```c
+bool ful_LinearQueue(linear_Queue liQueue) {
+    return (liQueue.rear == liQueue.size - 1);
+}
+```
+- *Ý tưởng*: Nếu `rear == size - 1`, hàng đợi đã đầy, không thể thêm phần tử mới.
+
+- **Thêm phần tử vào Linear Queue** (`enQueue`)
+```c
+void enQueue(linear_Queue *liQueue, int data) {
+    if (ful_LinearQueue(*liQueue)) {
+        printf("Ham doi day! Khong them gia tri vao ham doi.\n");
+        return;
+    }
+    if (empty_LinearQueue(*liQueue)) {
+        liQueue->front = 0;
+        liQueue->rear = 0;
+    } else {
+        liQueue->rear++;
+    }
+    liQueue->item[liQueue->rear] = data;
+}
+```
+- *Ý tưởng*: Nếu hàng đợi chưa đầy, tăng `rear` lên một đơn vị và gán giá trị `data` vào vị trí mới. Nếu hàng đợi đang rỗng, khởi tạo `front` và `rear` bằng `0`.
+
+- **Loại bỏ phần tử khỏi Linear Queue** (`deQueue`)
+```c
+void deQueue(linear_Queue *liQueue) {
+    if (empty_LinearQueue(*liQueue)) {
+        printf("Ham doi rong! Khong the xoa.\n");
+        return;
+    }
+    printf("Vi tri %d co gia tri %d da xoa khoi ham doi.\n", liQueue->front, liQueue->item[liQueue->front]);
+    if (liQueue->front < liQueue->rear) {
+        liQueue->front++;
+    } else {
+        // Nếu chỉ còn 1 phần tử, reset hàng đợi
+        liQueue->front = -1;
+        liQueue->rear = -1;
+    }
+}
+```
+- *Ý tưởng*: Nếu hàng đợi không rỗng, loại bỏ phần tử tại `front`, sau đó tăng `front`. Nếu chỉ còn một phần tử, đặt lại `front` và `rear` về `-1`.
+
+- **Hiển thị Linear Queue** (`display_LinearQueue`)
+```c
+void display_LinearQueue(linear_Queue lQ) {
+    if (empty_LinearQueue(lQ)) {
+        printf("Ham doi rong!\n");
+        return;
+    }
+    for (int i = lQ.front; i <= lQ.rear; i++) {
+        printf("Vi tri %d gia tri %d\n", i, lQ.item[i]);
+    }
+}
+```
+- *Ý tưởng*: Duyệt từ `front` đến `rear` và in giá trị từng phần tử trong hàng đợi.
+
+## 3. CIRCULAR QUEUE
+
+### 3.1. Khái niệm Circular Queue
+- **Circular Queue** (hàng đợi vòng) là một cấu trúc dữ liệu tuân theo nguyên tắc **FIFO (First In, First Out - Vào trước, ra trước)** nhưng sử dụng không gian bộ nhớ hiệu quả hơn so với Linear Queue. Khi phần tử đầu tiên được xóa, vị trí trống sẽ được tái sử dụng.
+
+Hàng đợi vòng sử dụng hai chỉ số:
+- **Front**: Chỉ phần tử đầu tiên của hàng đợi.
+- **Rear**: Chỉ phần tử cuối cùng của hàng đợi.
+- **Cơ chế vòng**: Khi `rear` đạt giới hạn, nó quay lại vị trí đầu tiên nếu có chỗ trống.
+
+## 3.2. Các thao tác với Circular Queue
+
+- **Khởi tạo Circular Queue** (`queue_Init`)
+```c
+void queue_Init(Queue *queue, int size) {
+    queue->items = (int*)malloc(size * sizeof(int));
+    queue->size  = size;
+    queue->front = queue->rear = -1;
+}
+```
+- *Ý tưởng*: Cấp phát bộ nhớ động cho `items`, thiết lập `front` và `rear` về `-1` để biểu thị hàng đợi rỗng.
+
+- **Kiểm tra Circular Queue rỗng** (`queue_IsEmpty`)
+```c
+int queue_IsEmpty(Queue queue) {
+    return (queue.front == -1);
+}
+```
+- *Ý tưởng*: Kiểm tra nếu `front == -1` thì hàng đợi rỗng.
+
+- **Kiểm tra Circular Queue đầy** (`queue_IsFull`)
+```c
+int queue_IsFull(Queue queue) {
+    return ((queue.rear + 1) % queue.size == queue.front);
+}
+```
+- *Ý tưởng*: Nếu `(rear + 1) % size == front`, tức là không còn chỗ trống, hàng đợi đã đầy.
+
+- **Thêm phần tử vào Circular Queue** (`enqueue`)
+```c
+void enqueue(Queue *queue, int data) {
+    if (queue_IsFull(*queue)) {
+        printf("Hàng đợi đầy!\n");
+        return;
+    }
+    if (queue_IsEmpty(*queue)) {
+        queue->front = queue->rear = 0;
+    } else {
+        queue->rear = (queue->rear + 1) % queue->size;
+    }
+    queue->items[queue->rear] = data;
+    printf("Enqueued %d\n", data);
+}
+```
+- *Ý tưởng*: Nếu hàng đợi không đầy, thêm phần tử vào vị trí `rear` và cập nhật `rear` theo cơ chế vòng.
+
+- **Loại bỏ phần tử khỏi Circular Queue** (`dequeue`)
+```c
+int dequeue(Queue *queue) {
+    if (queue_IsEmpty(*queue)) {
+        printf("Hàng đợi rỗng\n");
+        return -1;
+    }
+    int dequeue_value = queue->items[queue->front];
+    if (queue->front == queue->rear) {
+        queue->front = queue->rear = -1;
+    } else {
+        queue->front = (queue->front + 1) % queue->size;
+    }
+    return dequeue_value;
+}
+```
+- *Ý tưởng*: Nếu hàng đợi không rỗng, lấy phần tử `front`, cập nhật `front` theo cơ chế vòng.
+
+- **Lấy giá trị phần tử đầu** (`front`)
+```c
+int front(Queue queue) {
+    if (queue_IsEmpty(queue)) {
+        printf("Queue is empty\n");
+        return -1;
+    }
+    return queue.items[queue.front];
+}
+```
+- *Ý tưởng*: Trả về giá trị phần tử đầu tiên của hàng đợi.
+
+- **Lấy giá trị phần tử cuối** (`rear`)
+```c
+int rear(Queue queue) {
+    if (queue_IsEmpty(queue)) {
+        printf("Queue is empty\n");
+        return -1;
+    }
+    return queue.items[queue.rear];
+}
+```
+- *Ý tưởng*: Trả về giá trị phần tử cuối cùng của hàng đợi.
+
+- **Hiển thị Circular Queue** (`display`)
+```c
+void display(Queue q) {
+    if (queue_IsEmpty(q)) {
+        printf("Hàng đợi rỗng\n");
+        return;
+    }
+    printf("Hàng đợi: ");
+    int i = q.front;
+    while (1) {
+        printf("%d ", q.items[i]);
+        if (i == q.rear) break;
+        i = (i + 1) % q.size;
+    }
+    printf("\n");
+}
+```
+- *Ý tưởng*: Duyệt qua các phần tử từ `front` đến `rear` theo cơ chế vòng.
+  </details>
