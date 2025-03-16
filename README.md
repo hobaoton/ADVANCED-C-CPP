@@ -1151,6 +1151,143 @@ int main ()
 - Ứng dụng xử lý lỗi ngoại lệ chương trình, debug chương trình.
   </details>
 
+# BAI 8 MEMORY LAYOUT
+  <details>
+    <summary>Chi tiết</summary>
+
+## 1. Text Segment
+
+- **Chứa các lệnh thực thi**: Khi chạy chương trình, bộ xử lý (CPU) sẽ truy cập các lệnh nằm ở vùng Text để thực hiện.
+- **Quyền truy cập**: Chỉ cho phép đọc và thực thi; không cho phép ghi (ghi đè các lệnh thực thi).
+
+### Ví dụ:
+```c
+#include <stdio.h>
+
+void function() {
+    printf("Hello, World!\n"); // Lệnh thực thi được lưu ở Text segment
+}
+
+int main() {
+    function();
+    return 0;
+}
+```
+
+## 2. Data Segment (Dữ liệu đã được khởi tạo)
+
+- **Chứa các biến đã được khởi tạo**:
+  - Biến toàn cục.
+  - Biến static toàn cục.
+  - Biến static cục bộ.
+  - Các con trỏ toàn cục, con trỏ tĩnh được cấp phát trong Data segment với giá trị khởi tạo khác 0.
+- **Đặc điểm**:
+  - Các biến được khởi tạo với giá trị khác 0 được lưu ở đây.
+  - Cho phép đọc và ghi (có thể thay đổi giá trị của biến).
+  - Tất cả các biến trong Data segment sẽ được thu hồi khi chương trình kết thúc.
+- **Lưu ý về biến `const` và chuỗi ký tự**:
+  - Các biến `const` (ví dụ: `const int a = 0`) hoặc chuỗi ký tự (ví dụ: `char *str = "hello world"`) cũng được lưu ở Data segment, nhưng chỉ có quyền truy cập là chỉ đọc (read-only).
+
+### Ví dụ:
+```c
+#include <stdio.h>
+
+int a = 10; // Biến toàn cục khác 0 -> Data segment
+static int b = 20; // Biến static toàn cục khác 0 -> Data segment
+void *ptr = &b; // Con trỏ toàn cục khác 0 -> Data segment
+
+void function() {
+    static int staticLocalVar = 30; // Biến static cục bộ khác 0 -> Data segment
+}
+
+int main() {
+    return 0;
+}
+```
+
+## 3. BSS Segment (Dữ liệu chưa khởi tạo)
+
+- **Chứa các biến chưa được khởi tạo hoặc được khởi tạo với giá trị 0**:
+  - Các biến toàn cục chưa khởi tạo hoặc khởi tạo bằng 0.
+  - Các biến static (toàn cục hoặc cục bộ) chưa khởi tạo hoặc khởi tạo bằng 0.
+  - Các con trỏ toàn cục và static chưa khởi tạo hoặc khởi tạo bằng 0.
+- **Đặc điểm**:
+  - BSS segment cho phép đọc và ghi.
+  - Các biến trong BSS cũng được thu hồi khi chương trình kết thúc.
+- **Kết luận**: Vai trò của BSS giống với Data segment, khác biệt duy nhất là các biến trong BSS chưa được khởi tạo hoặc được khởi tạo bằng 0.
+
+### Ví dụ:
+```c
+#include <stdio.h>
+
+typedef struct{
+    int a;
+    int b;
+} Point_Data;
+
+Point_Data a1 = {5, 6}; // Biến có giá trị khác 0 -> Data segment
+Point_Data a2 = {0, 0}; // Biến có giá trị bằng 0 -> BSS segment
+Point_Data a3; // Biến chưa khởi tạo -> BSS segment
+
+int x = 0; // Biến toàn cục = 0 -> BSS segment
+static int y; // Biến static chưa khởi tạo -> BSS segment
+
+int main() {
+    return 0;
+}
+```
+
+## 4. Stack Segment
+
+- **Chứa**:
+  - Các biến cục bộ.
+  - Các con trỏ cục bộ (ngoại trừ static cục bộ).
+  - Các tham số truyền vào hàm.
+- **Đặc điểm**:
+  - Cho phép đọc và ghi.
+  - Sau khi chạy xong hàm, các biến trong Stack sẽ bị thu hồi.
+  - Giá trị nào được cấp phát đầu tiên sẽ được thu hồi cuối cùng (LIFO - Last In, First Out).
+
+### Ví dụ:
+```c
+#include <stdio.h>
+
+void function() {
+    int localVar = 10; // Biến cục bộ -> Stack
+    printf("localVar: %d\n", localVar);
+}
+
+int main() {
+    function();
+    return 0;
+}
+```
+
+## 5. Heap Segment
+
+- **Chứa dữ liệu cấp phát động**:
+  - Được cấp phát thông qua `malloc`, `calloc`, `realloc`.
+  - Không tự động thu hồi khi kết thúc chương trình, cần thu hồi bằng `free()`.
+
+### Ví dụ:
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int *ptr = (int*)malloc(sizeof(int)); // Cấp phát động trên Heap
+    if (ptr == NULL) {
+        printf("Memory allocation failed\n");
+        return 1;
+    }
+    *ptr = 100;
+    printf("Value: %d\n", *ptr);
+    free(ptr); // Giải phóng bộ nhớ trên Heap
+    return 0;
+}
+```
+  </details>
+
 # BAI 9 STACK - QUEUE
   <details>
     <summary>Chi tiết</summary>   
