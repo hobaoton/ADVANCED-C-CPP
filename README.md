@@ -763,7 +763,7 @@ int main() {
 ```
 </details>
 
-# BÀI 5 STORAGR CLASS (Extern- Static- Volatile- Register)
+# BAI 5 STORAGR CLASS (Extern- Static- Volatile- Register)
 
 <details>
   <summary>Chi tiết</summary>
@@ -1025,7 +1025,7 @@ Trong ví dụ trên, biến `i` được khai báo là `register`, yêu cầu t
 </details>
 
 
-# BÀI 6 GOTO- SETJMP
+# BAI 6 GOTO- SETJMP
 <details>
   <summary>Chi tiết</summary>
   
