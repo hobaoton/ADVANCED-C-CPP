@@ -1152,8 +1152,8 @@ int main ()
   </details>
 
 # BAI 7 STRUCT && UNION
-<details>
-  <summary>Chi tiết</summary
+  <details>
+    <summary>Chi tiết</summary>
 
 ## 1. Struct
 - **Struct** cho phép định nghĩa một kiểu dữ liệu gồm nhiều thành phần (các biến) khác nhau. Mỗi thành phần của struct được gọi là **thành viên**. Struct rất hữu ích muốn nhóm các thông tin liên quan (ví dụ: thông tin của một sinh viên hay một điểm trong không gian).
