@@ -2049,3 +2049,182 @@ void clear(Node **head) {
 - Gọi `free(temp)` để giải phóng bộ nhớ của node hiện tại.
 - Lặp lại quá trình cho đến khi danh sách rỗng (tức `*head` bằng `NULL`).
 </details>
+
+# BAI 11 JSON (JAVASCRIPT OBJECT NOTATION)
+<details>
+  <summary>Chi tiết</summary>
+
+
+## 1. Giới thiệu khái niệm về JSON
+
+`JSON` (JavaScript Object Notation) là một định dạng trao đổi dữ liệu, được thiết kế để dễ đọc và dễ ghi cho cả con người và máy tính. Nó được phát triển dựa trên cú pháp của JavaScript nhưng hiện nay được sử dụng rộng rãi trên nhiều nền tảng và ngôn ngữ lập trình khác nhau. JSON giúp định dạng dữ liệu trở nên có cấu trúc, cho phép trao đổi thông tin giữa các hệ thống một cách hiệu quả.
+
+## 2. Đặc điểm của JSON
+
+- **Dữ liệu có cấu trúc:**  
+  JSON lưu trữ dữ liệu dưới dạng cặp khóa-giá trị (key-value pairs), giúp tổ chức dữ liệu theo cách rõ ràng và dễ truy xuất.
+
+- **Dễ đọc và viết:**  
+  Với cấu trúc đơn giản và cú pháp rõ ràng, JSON dễ dàng cho người lập trình đọc và viết, đồng thời cũng dễ dàng phân tích bởi các chương trình.
+
+- **Độc lập ngôn ngữ:**  
+  JSON không phụ thuộc vào ngôn ngữ lập trình cụ thể nào, cho phép sử dụng trong nhiều môi trường khác nhau như JavaScript, Python, C/C++, Java, và nhiều ngôn ngữ khác.
+
+- **Nhẹ và hiệu quả:**  
+  So với các định dạng dữ liệu khác như XML, JSON có kích thước nhỏ gọn hơn, giúp tiết kiệm băng thông và cải thiện tốc độ truyền dữ liệu.
+
+## 3. Các kiểu dữ liệu trong JSON và đặc điểm của từng kiểu dữ liệu
+
+JSON định nghĩa 6 kiểu dữ liệu cơ bản:
+
+### 3.1 Object
+
+- **Mô tả:**  
+  Object là tập hợp các cặp khóa-giá trị được đặt trong dấu ngoặc nhọn `{}`. Mỗi khóa (key) là một chuỗi (string) được đặt trong dấu ngoặc kép `"..."`, và mỗi giá trị (value) có thể thuộc một trong các kiểu dữ liệu JSON hợp lệ. Object có thể chứa:
+  - Các giá trị đơn lẻ như string, number, boolean hoặc null.
+  - Các đối tượng (object) khác (object lồng nhau).
+  - Các mảng (array).
+
+- **Đặc điểm:**  
+  - Cấu trúc dạng cặp key-value.
+  - Cho phép lồng các đối tượng (object) khác.
+  - Các khóa trong object phải là duy nhất.
+
+- **Ví dụ:**
+
+  ```json
+  {
+    "name": "Alice",
+    "age": 28,
+    "city": "Hanoi"
+  }
+  ```
+
+- **Object lồng nhau:**  
+  Một object có thể chứa các object khác bên trong, cho phép xây dựng các cấu trúc dữ liệu phức tạp.
+
+  ```json
+  {
+    "car": {
+      "brand": "Toyota",
+      "model": "Camry",
+      "year": 2017,
+      "features": ["Bluetooth", "GPS", "Camera"]
+    }
+  }
+  ```
+
+### 3.2 Array
+
+- **Mô tả:**  
+  Array là danh sách các phần tử được đặt trong dấu ngoặc vuông `[]`, các phần tử được phân tách bằng dấu phẩy. Một array có thể chứa các giá trị thuộc bất kỳ kiểu dữ liệu nào, bao gồm cả object, array khác, string, number, boolean, và null.
+
+- **Đặc điểm:**  
+  - Dữ liệu được lưu theo thứ tự.
+  - Các phần tử được phân tách bởi dấu phẩy.
+  - Cho phép lồng các array khác.
+
+- **Ví dụ:**
+
+  ```json
+  ["Red", "Green", "Blue"]
+  ```
+
+  Ví dụ phức tạp:
+
+  ```json
+  [
+    1,
+    "Hello",
+    true,
+    null,
+    { "key": "value" },
+    [10, 20, 30]
+  ]
+  ```
+
+### 3.3 String
+
+- **Mô tả:**  
+  String là chuỗi ký tự được đặt trong dấu ngoặc kép `"..."`.
+
+- **Đặc điểm:**  
+  - Dùng để biểu diễn văn bản.
+  - Luôn được đặt trong dấu ngoặc kép.
+
+- **Ví dụ:**
+
+  ```json
+  "Hello, JSON!"
+  ```
+
+### 3.4 Number
+
+- **Mô tả:**  
+  Number đại diện cho số, bao gồm cả số nguyên và số thực.
+
+- **Đặc điểm:**  
+  - Không được đặt trong dấu ngoặc kép.
+  - Hỗ trợ số dương và số âm.
+
+- **Ví dụ:**
+
+  ```json
+  123
+  ```
+
+  ```json
+  -45.67
+  ```
+
+### 3.5 Boolean
+
+- **Mô tả:**  
+  Boolean biểu diễn giá trị đúng hoặc sai.
+
+- **Đặc điểm:**  
+  - Chỉ có hai giá trị: `true` hoặc `false`.
+
+- **Ví dụ:**
+
+  ```json
+  true
+  ```
+
+  ```json
+  false
+  ```
+
+### 3.6 Null
+
+- **Mô tả:**  
+  Null biểu thị giá trị không xác định hoặc không có dữ liệu.
+
+- **Đặc điểm:**  
+  - Dùng để chỉ ra sự vắng mặt của một giá trị.
+
+- **Ví dụ:**
+
+  ```json
+  null
+  ```
+
+## 4. Ứng dụng của kiểu dữ liệu JSON trong lập trình nhúng
+
+Trong lập trình nhúng, các hệ thống thường phải đối mặt với giới hạn về tài nguyên như bộ nhớ và băng thông. JSON mang lại một số lợi ích trong môi trường này:
+
+- **Giao tiếp dữ liệu giữa các thiết bị:**  
+  JSON được sử dụng để trao đổi dữ liệu giữa các thiết bị nhúng thông qua các giao thức mạng (ví dụ: MQTT, HTTP). Nhờ tính nhẹ và hiệu quả, JSON giúp giảm tải băng thông và cải thiện tốc độ truyền dữ liệu.
+
+- **Cấu hình và lưu trữ dữ liệu:**  
+  JSON có thể được dùng để lưu trữ cấu hình hoặc dữ liệu trạng thái của thiết bị nhúng. Các file cấu hình dạng JSON cho phép dễ dàng chỉnh sửa và mở rộng khi cần thiết.
+
+- **Tương tác với dịch vụ đám mây:**  
+  Trong các hệ thống nhúng có kết nối Internet, JSON được sử dụng để giao tiếp với các API hoặc dịch vụ đám mây, mở rộng chức năng của thiết bị và cho phép quản lý từ xa.
+
+- **Khả năng mở rộng và tích hợp:**  
+  JSON, với tính linh hoạt của nó, cho phép tích hợp dễ dàng giữa các hệ thống khác nhau, ngay cả khi các hệ thống đó được xây dựng bằng các ngôn ngữ lập trình khác nhau. Điều này rất hữu ích trong các ứng dụng nhúng cần kết nối với các hệ thống quản lý từ xa hoặc các ứng dụng di động.
+
+JSON, nhờ kích thước nhỏ gọn và tính linh hoạt, đã trở thành một công cụ quan trọng trong việc quản lý và trao đổi dữ liệu, không chỉ trong các ứng dụng web mà còn trong lập trình nhúng hiện đại.
+```
+</details>
